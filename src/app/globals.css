@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+  --sage: #3d5233;
+  --sage-mid: #4f6642;
+  --sage-light: #6b7c60;
+  --sage-pale: #e8ede3;
+  --sage-bg: #f0f4ec;
+  --cream: #faf9f5;
+  --cream-dark: #f2f0ea;
+  --stone: #8a8a78;
+  --stone-light: #c8c8b8;
+  --stone-pale: #eeeee8;
+  --text: #1a1e14;
+  --text-muted: #666658;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 100px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 0; }
