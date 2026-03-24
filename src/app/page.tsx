@@ -202,7 +202,7 @@ export default function StridesApp() {
                   <button
                     key={opt.value}
                     className={`${styles.choiceBtn} ${feeling === opt.value ? styles.choiceSelected : ''}`}
-                    onClick={() => setFeeling(opt.value)}
+                    onClick={() => { setFeeling(opt.value); go('step2') }}
                   >
                     <span className={styles.choiceIcon}>{opt.icon}</span>
                     <span className={styles.choiceName}>{opt.label}</span>
@@ -210,7 +210,6 @@ export default function StridesApp() {
                   </button>
                 ))}
               </div>
-              <button className={styles.btnPrimary} onClick={() => go('step2')}>Continue →</button>
             </div>
           </div>
         )}
@@ -231,7 +230,7 @@ export default function StridesApp() {
                   <button
                     key={opt.value}
                     className={`${styles.choiceBtn} ${runType === opt.value ? styles.choiceSelected : ''}`}
-                    onClick={() => setRunType(opt.value)}
+                    onClick={() => { setRunType(opt.value); go('step3') }}
                   >
                     <span className={styles.choiceIcon}>{opt.icon}</span>
                     <span className={styles.choiceName}>{opt.label}</span>
@@ -239,7 +238,6 @@ export default function StridesApp() {
                   </button>
                 ))}
               </div>
-              <button className={styles.btnPrimary} onClick={() => go('step3')}>Continue →</button>
             </div>
           </div>
         )}
