@@ -809,3 +809,144 @@
   padding: 12px 14px;
   margin-top: 12px;
 }
+
+/* DARK MODE OVERRIDES */
+.dark .shell,
+.dark.shell {
+  background: #0e1410;
+}
+
+.dark .app,
+.dark.app {
+  background: var(--cream);
+}
+
+.dark .recentCard,
+.dark .choiceBtn,
+.dark .fitnessBtn,
+.dark .foptBtn {
+  background: var(--card-bg);
+  border-color: var(--stone-light);
+}
+
+.dark .choiceBtn:hover,
+.dark .choiceSelected {
+  background: var(--sage-pale);
+  border-color: var(--sage);
+}
+
+.dark .navBar {
+  background: var(--nav-bg);
+  border-top-color: var(--nav-border);
+}
+
+.dark .aiInsight {
+  background: var(--sage-pale);
+}
+
+.dark .workoutStats {
+  background: var(--cream-dark);
+}
+
+.dark .pacePreview {
+  background: var(--stone-pale);
+}
+
+.dark .weekDayPeak {
+  background: var(--sage-pale);
+}
+
+.dark .goalBar {
+  background: var(--sage-pale);
+}
+
+.dark .textarea {
+  background: var(--card-bg);
+  border-color: var(--stone-light);
+  color: var(--text);
+}
+
+.dark .tag {
+  background: var(--sage-pale);
+  color: var(--sage);
+}
+
+.dark .fitnessBtnSelected {
+  background: var(--sage-pale);
+  border-color: var(--sage);
+}
+
+.dark .btnSecondary {
+  border-color: var(--sage-light);
+  color: var(--sage);
+}
+
+.dark .btnSecondary:hover {
+  background: var(--sage-pale);
+}
+
+/* RECENT RUN STATS ROW */
+.recentStats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.feelDot {
+  color: var(--sage);
+  font-weight: 500;
+}
+
+/* FEEL SCALE */
+.feelScale {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.feelBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 6px;
+  background: white;
+  border: 1.5px solid var(--stone-light);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.dark .feelBtn {
+  background: var(--card-bg);
+  border-color: var(--stone-light);
+}
+
+.feelBtn:hover {
+  border-color: var(--sage-light);
+  background: var(--sage-pale);
+}
+
+.feelBtnActive {
+  border-color: var(--sage);
+  background: var(--sage-pale);
+}
+
+.feelNum {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--sage);
+}
+
+.feelLabel {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}

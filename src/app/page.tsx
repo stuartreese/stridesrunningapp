@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './page.module.css'
 
-type Screen = 'home' | 'step1' | 'step2' | 'step3' | 'step4' | 'loading' | 'workout' | 'week-setup' | 'week-loading' | 'week'
+type Screen = 'home' | 'step1' | 'step2' | 'step3' | 'step4' | 'loading' | 'workout' | 'post-run' | 'week-setup' | 'week-loading' | 'week'
 
 type WorkoutStep = {
   name: string
@@ -35,6 +35,17 @@ type WeekPlan = {
   days: WeekDay[]
 }
 
+type RunLog = {
+  id: string
+  date: string
+  name: string
+  distance: number
+  duration: number
+  pace: string
+  feel: number
+  notes: string
+}
+
 const FEELING_OPTIONS = [
   { value: 'energized', icon: '⚡', label: 'Energized', desc: 'Legs fresh, ready to push' },
   { value: 'steady', icon: '〰', label: 'Steady', desc: 'Good, but not electric' },
@@ -55,8 +66,11 @@ const FITNESS_OPTIONS = [
   { value: 'advanced', label: 'Consistent runner', desc: '30+ miles/week' },
 ]
 
+const FEEL_LABELS = ['Brutal', 'Tough', 'Solid', 'Strong', 'Flying']
+
 export default function StridesApp() {
   const [screen, setScreen] = useState<Screen>('home')
+  const [darkMode, setDarkMode] = useState(false)
   const [feeling, setFeeling] = useState('steady')
   const [runType, setRunType] = useState('endurance')
   const [distance, setDistance] = useState(5)
@@ -65,6 +79,13 @@ export default function StridesApp() {
   const [workout, setWorkout] = useState<Workout | null>(null)
   const [error, setError] = useState('')
 
+  // Post-run state
+  const [actualDistance, setActualDistance] = useState(5)
+  const [actualDuration, setActualDuration] = useState(45)
+  const [runFeel, setRunFeel] = useState(3)
+  const [runNotes, setRunNotes] = useState('')
+  const [runLog, setRunLog] = useState<RunLog[]>([])
+
   // Week plan state
   const [weekGoal, setWeekGoal] = useState(20)
   const [weekDays, setWeekDays] = useState(4)
@@ -72,13 +93,50 @@ export default function StridesApp() {
   const [weekNotes, setWeekNotes] = useState('')
   const [weekPlan, setWeekPlan] = useState<WeekPlan | null>(null)
 
+  // Apply dark mode to document root
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light')
+  }, [darkMode])
+
+  // Load run log from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('strides-run-log')
+    if (saved) setRunLog(JSON.parse(saved))
+  }, [])
+
   const go = (s: Screen) => { setScreen(s); setError('') }
 
-  const paceDisplay = () => {
-    const raw = duration / distance
+  const paceDisplay = (dist = distance, dur = duration) => {
+    const raw = dur / dist
     const min = Math.floor(raw)
     const sec = Math.round((raw - min) * 60)
     return `${min}:${sec < 10 ? '0' : ''}${sec}`
+  }
+
+  function startRun() {
+    setActualDistance(distance)
+    setActualDuration(duration)
+    setRunFeel(3)
+    setRunNotes('')
+    go('post-run')
+  }
+
+  function logRun() {
+    if (!workout) return
+    const entry: RunLog = {
+      id: Date.now().toString(),
+      date: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+      name: workout.name,
+      distance: actualDistance,
+      duration: actualDuration,
+      pace: paceDisplay(actualDistance, actualDuration),
+      feel: runFeel,
+      notes: runNotes,
+    }
+    const updated = [entry, ...runLog]
+    setRunLog(updated)
+    localStorage.setItem('strides-run-log', JSON.stringify(updated))
+    go('home')
   }
 
   async function generateWorkout() {
@@ -143,16 +201,26 @@ export default function StridesApp() {
     </nav>
   )
 
+  const DarkToggle = () => (
+    <button
+      className={styles.iconBtn}
+      onClick={() => setDarkMode(d => !d)}
+      title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {darkMode ? <MoonIcon /> : <SunIcon />}
+    </button>
+  )
+
   return (
-    <div className={styles.shell}>
-      <div className={styles.app}>
+    <div className={`${styles.shell} ${darkMode ? styles.dark : ''}`}>
+      <div className={`${styles.app} ${darkMode ? styles.dark : ''}`}>
 
         {/* HOME */}
         {screen === 'home' && (
           <div className={styles.screen}>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
-              <button className={styles.iconBtn}><SettingsIcon /></button>
+              <DarkToggle />
             </div>
             <div className={styles.body}>
               <div className={styles.greeting}>Good morning</div>
@@ -162,7 +230,9 @@ export default function StridesApp() {
               <div className={styles.aiInsight}>
                 <div className={styles.aiLabel}>✦ AI insight</div>
                 <p className={styles.aiText}>
-                  Start a workout to get personalized insights based on your training history and today&apos;s goals.
+                  {runLog.length > 0
+                    ? `Your last run was ${runLog[0].name} — ${runLog[0].distance} miles. You rated it ${FEEL_LABELS[runLog[0].feel - 1]}. Keep it going.`
+                    : "Start a workout to get personalized insights based on your training history and today's goals."}
                 </p>
               </div>
 
@@ -174,13 +244,30 @@ export default function StridesApp() {
               </button>
 
               <div className={styles.recentLabel}>Recent runs</div>
-              <div className={styles.recentCard}>
-                <div className={styles.recentCardTop}>
-                  <span className={styles.recentName}>Your first run awaits</span>
-                  <span className={styles.recentDate}>—</span>
+              {runLog.length === 0 ? (
+                <div className={styles.recentCard}>
+                  <div className={styles.recentCardTop}>
+                    <span className={styles.recentName}>Your first run awaits</span>
+                    <span className={styles.recentDate}>—</span>
+                  </div>
+                  <p className={styles.recentEmpty}>Generate your first Strides workout to see it here.</p>
                 </div>
-                <p className={styles.recentEmpty}>Generate your first Strides workout to see it here.</p>
-              </div>
+              ) : (
+                runLog.slice(0, 3).map(run => (
+                  <div key={run.id} className={styles.recentCard} style={{ marginBottom: '10px' }}>
+                    <div className={styles.recentCardTop}>
+                      <span className={styles.recentName}>{run.name}</span>
+                      <span className={styles.recentDate}>{run.date}</span>
+                    </div>
+                    <div className={styles.recentStats}>
+                      <span>{run.distance} mi</span>
+                      <span>{run.pace} /mi</span>
+                      <span>{run.duration} min</span>
+                      <span className={styles.feelDot}>{FEEL_LABELS[run.feel - 1]}</span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
             <NavBar active="home" />
           </div>
@@ -332,7 +419,7 @@ export default function StridesApp() {
           <div className={styles.screen}>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
-              <button className={styles.iconBtn}><EditIcon /></button>
+              <DarkToggle />
             </div>
             <div className={styles.scrollable}>
               <div className={styles.body} style={{ paddingBottom: '100px' }}>
@@ -387,7 +474,7 @@ export default function StridesApp() {
                   </>
                 )}
 
-                <button className={styles.btnPrimary} style={{ marginTop: '28px' }}>
+                <button className={styles.btnPrimary} style={{ marginTop: '28px' }} onClick={startRun}>
                   Start Run →
                 </button>
                 <button className={styles.btnSecondary} onClick={() => go('step1')}>
@@ -399,12 +486,82 @@ export default function StridesApp() {
           </div>
         )}
 
+        {/* POST-RUN LOG */}
+        {screen === 'post-run' && workout && (
+          <div className={styles.screen}>
+            <div className={styles.topBar}>
+              <button className={styles.backBtn} onClick={() => go('workout')}>← back</button>
+              <span className={styles.logo}>Strides</span>
+              <DarkToggle />
+            </div>
+            <div className={styles.scrollable}>
+              <div className={styles.body} style={{ paddingBottom: '40px' }}>
+                <div className={styles.stepLabel}>Run complete</div>
+                <h1 className={styles.stepHeadline}>How did it go?</h1>
+                <p className={styles.stepSub}>Log what actually happened — this helps shape your next workout.</p>
+
+                <div className={styles.fieldLabel}>Actual distance</div>
+                <div className={styles.sliderWrap}>
+                  <div className={styles.sliderDisplay}>{actualDistance.toFixed(1)}</div>
+                  <div className={styles.sliderUnit}>miles</div>
+                  <input type="range" min="0.5" max="30" step="0.1" value={actualDistance}
+                    onChange={e => setActualDistance(parseFloat(e.target.value))} className={styles.slider} />
+                  <div className={styles.rangeLabels}><span>0.5 mi</span><span>30 mi</span></div>
+                </div>
+
+                <div className={styles.fieldLabel}>Actual duration</div>
+                <div className={styles.sliderWrap}>
+                  <div className={styles.sliderDisplay}>{actualDuration}</div>
+                  <div className={styles.sliderUnit}>minutes</div>
+                  <input type="range" min="5" max="300" step="1" value={actualDuration}
+                    onChange={e => setActualDuration(parseInt(e.target.value))} className={styles.slider} />
+                  <div className={styles.rangeLabels}><span>5 min</span><span>5 hrs</span></div>
+                </div>
+
+                <div className={styles.pacePreview}>
+                  Actual pace: <strong>{paceDisplay(actualDistance, actualDuration)} /mi</strong>
+                </div>
+
+                <div className={styles.fieldLabel}>How did it feel?</div>
+                <div className={styles.feelScale}>
+                  {[1, 2, 3, 4, 5].map(n => (
+                    <button
+                      key={n}
+                      className={`${styles.feelBtn} ${runFeel === n ? styles.feelBtnActive : ''}`}
+                      onClick={() => setRunFeel(n)}
+                    >
+                      <span className={styles.feelNum}>{n}</span>
+                      <span className={styles.feelLabel}>{FEEL_LABELS[n - 1]}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className={styles.fieldLabel}>Notes</div>
+                <textarea
+                  className={styles.textarea}
+                  rows={3}
+                  placeholder="How were your legs? Any tightness? What surprised you?"
+                  value={runNotes}
+                  onChange={e => setRunNotes(e.target.value)}
+                />
+
+                <button className={styles.btnPrimary} onClick={logRun}>
+                  Log This Run ✓
+                </button>
+                <button className={styles.btnSecondary} onClick={() => go('home')}>
+                  Skip logging
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* WEEK SETUP */}
         {screen === 'week-setup' && (
           <div className={styles.screen}>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
-              <button className={styles.iconBtn}><CalIcon /></button>
+              <DarkToggle />
             </div>
             <div className={styles.scrollable}>
               <div className={styles.body} style={{ paddingBottom: '100px' }}>
@@ -481,7 +638,7 @@ export default function StridesApp() {
           <div className={styles.screen}>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
-              <button className={styles.iconBtn} onClick={() => go('week-setup')}><EditIcon /></button>
+              <DarkToggle />
             </div>
             <div className={styles.scrollable}>
               <div className={styles.body} style={{ paddingBottom: '100px' }}>
@@ -513,12 +670,16 @@ export default function StridesApp() {
                 <div className={styles.goalBar}>
                   <div className={styles.goalBarTop}>
                     <span className={styles.goalBarLabel}>Weekly goal: {weekGoal} miles</span>
-                    <span className={styles.goalBarSub}>0 / {weekGoal} mi done</span>
+                    <span className={styles.goalBarSub}>
+                      {runLog.length > 0 ? `${runLog[0].distance} / ${weekGoal} mi done` : `0 / ${weekGoal} mi done`}
+                    </span>
                   </div>
                   <div className={styles.goalBarTrack}>
-                    <div className={styles.goalBarFill} style={{ width: '0%' }} />
+                    <div className={styles.goalBarFill} style={{ width: runLog.length > 0 ? `${Math.min((runLog[0].distance / weekGoal) * 100, 100)}%` : '0%' }} />
                   </div>
-                  <div className={styles.goalBarNote}>Start your runs to track progress</div>
+                  <div className={styles.goalBarNote}>
+                    {runLog.length > 0 ? "Keep going — you're on track." : 'Start your runs to track progress'}
+                  </div>
                 </div>
 
                 <button className={styles.btnPrimary} style={{ marginTop: '20px' }} onClick={() => go('week-setup')}>
@@ -538,7 +699,7 @@ export default function StridesApp() {
   )
 }
 
-// SVG icons
+// Icons
 const HomeIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M3 9.5L12 3l9 6.5V21H3V9.5z" />
@@ -559,10 +720,15 @@ const CalIcon = () => (
     <line x1="3" y1="10" x2="21" y2="10" />
   </svg>
 )
-const SettingsIcon = () => (
+const SunIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <circle cx="12" cy="12" r="3" />
-    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+  </svg>
+)
+const MoonIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
   </svg>
 )
 const EditIcon = () => (
