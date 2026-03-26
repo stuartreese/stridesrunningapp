@@ -113,19 +113,19 @@ export default function StridesApp() {
     setShowRunner(true)
     setIsEntering(false)
 
-    // Swap screen content at 400ms — after exit animation completes (280ms)
+    // Swap screen content at 300ms — after exit animation completes (210ms)
     // and runner is well underway, so there's no jarring jump
     setTimeout(() => {
       setScreen(s)
       setError('')
       setIsEntering(true)
-    }, 400)
+    }, 300)
 
-    // Hide runner after it has fully crossed (1200ms total)
+    // Hide runner after it has fully crossed (900ms total)
     setTimeout(() => {
       setShowRunner(false)
       setIsTransitioning(false)
-    }, 1200)
+    }, 900)
   }
 
   // Clean up enter state after animation completes

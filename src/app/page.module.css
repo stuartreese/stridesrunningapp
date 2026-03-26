@@ -44,11 +44,11 @@
 }
 
 .screenEnter {
-  animation: screenEnter 320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: screenEnter 240ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .screenExit {
-  animation: screenExit 280ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: screenExit 210ms cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 /* FULL-VIEWPORT OVERLAY — sibling of .app, not inside it */
@@ -87,7 +87,7 @@
   will-change: transform;
   backface-visibility: hidden;
   flex-shrink: 0;
-  animation: runnerRun 1200ms linear forwards;
+  animation: runnerRun 900ms linear forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
