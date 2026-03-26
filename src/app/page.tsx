@@ -111,7 +111,7 @@ export default function StridesApp() {
       setScreen(s)
       setError('')
       setTransitioning(false)
-    }, 650)
+    }, 1300)
   }
 
   const paceDisplay = (dist = distance, dur = duration) => {
