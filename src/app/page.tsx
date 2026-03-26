@@ -111,7 +111,7 @@ export default function StridesApp() {
       setScreen(s)
       setError('')
       setTransitioning(false)
-    }, 180)
+    }, 380)
   }
 
   const paceDisplay = (dist = distance, dur = duration) => {
@@ -702,6 +702,13 @@ export default function StridesApp() {
           </div>
         )}
 
+        {/* TRANSITION OVERLAY */}
+        {transitioning && (
+          <div className={styles.transitionOverlay}>
+            <RunnerIcon />
+          </div>
+        )}
+
       </div>
     </div>
   )
@@ -739,6 +746,19 @@ const MoonIcon = () => (
     <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
   </svg>
 )
+const RunnerIcon = () => (
+  <svg width="72" height="72" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="62" cy="18" r="7" />
+    <path d="M55 28 L44 48 L28 54" />
+    <path d="M44 48 L50 68 L38 84" />
+    <path d="M44 48 L62 56 L72 72" />
+    <path d="M55 28 L66 36 L78 30" />
+    <line x1="18" y1="50" x2="30" y2="50" />
+    <line x1="14" y1="58" x2="28" y2="58" />
+    <line x1="20" y1="66" x2="30" y2="62" />
+  </svg>
+)
+
 const EditIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />

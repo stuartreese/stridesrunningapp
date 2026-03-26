@@ -28,6 +28,13 @@
   to   { opacity: 0; transform: translateX(-24px); }
 }
 
+@keyframes runnerAppear {
+  0%   { opacity: 0; transform: translateX(-16px); }
+  30%  { opacity: 1; transform: translateX(0); }
+  70%  { opacity: 1; transform: translateX(8px); }
+  100% { opacity: 0; transform: translateX(32px); }
+}
+
 .sliding {
   animation: slideOut 0.18s ease forwards;
 }
@@ -37,6 +44,18 @@
   flex-direction: column;
   min-height: 100vh;
   animation: slideIn 0.22s ease forwards;
+}
+
+.transitionOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+  color: var(--primary);
+  animation: runnerAppear 0.38s ease forwards;
 }
 
 .scrollable {
