@@ -17,10 +17,26 @@
   transition: background 0.25s;
 }
 
+/* PAGE TRANSITION */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-24px); }
+}
+
+.sliding {
+  animation: slideOut 0.18s ease forwards;
+}
+
 .screen {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  animation: slideIn 0.22s ease forwards;
 }
 
 .scrollable {

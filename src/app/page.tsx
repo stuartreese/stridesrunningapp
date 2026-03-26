@@ -70,9 +70,10 @@ const FEEL_LABELS = ['Brutal', 'Tough', 'Solid', 'Strong', 'Flying']
 
 export default function StridesApp() {
   const [screen, setScreen] = useState<Screen>('home')
+  const [transitioning, setTransitioning] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
-  const [feeling, setFeeling] = useState('steady')
-  const [runType, setRunType] = useState('endurance')
+  const [feeling, setFeeling] = useState('')
+  const [runType, setRunType] = useState('')
   const [distance, setDistance] = useState(5)
   const [duration, setDuration] = useState(45)
   const [notes, setNotes] = useState('')
@@ -104,7 +105,14 @@ export default function StridesApp() {
     if (saved) setRunLog(JSON.parse(saved))
   }, [])
 
-  const go = (s: Screen) => { setScreen(s); setError('') }
+  const go = (s: Screen) => {
+    setTransitioning(true)
+    setTimeout(() => {
+      setScreen(s)
+      setError('')
+      setTransitioning(false)
+    }, 180)
+  }
 
   const paceDisplay = (dist = distance, dur = duration) => {
     const raw = dur / dist
@@ -213,7 +221,7 @@ export default function StridesApp() {
 
   return (
     <div className={`${styles.shell} ${darkMode ? styles.dark : ''}`}>
-      <div className={`${styles.app} ${darkMode ? styles.dark : ''}`}>
+      <div className={`${styles.app} ${darkMode ? styles.dark : ''} ${transitioning ? styles.sliding : ''}`}>
 
         {/* HOME */}
         {screen === 'home' && (
