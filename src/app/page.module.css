@@ -883,6 +883,53 @@
   background: #0e1014;
 }
 
+.dark .btnPrimary {
+  color: #1A1C22;
+}
+
+.dark .btnSecondary {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.dark .aiInsight {
+  background: var(--primary-pale);
+  border-left-color: var(--primary);
+}
+
+.dark .aiLabel {
+  color: var(--primary);
+}
+
+.dark .pacePreview {
+  background: var(--primary-pale);
+}
+
+.dark .pacePreview strong {
+  color: var(--primary);
+}
+
+.dark .workoutStats {
+  background: var(--primary-pale);
+}
+
+.dark .sessionStep {
+  border-bottom-color: var(--stone-light);
+}
+
+.dark .weekDayPeak {
+  background: var(--primary-pale);
+}
+
+.dark .goalBar {
+  background: var(--primary-pale);
+}
+
+.dark .badgeRun {
+  background: var(--primary-pale);
+  color: var(--primary);
+}
+
 .dark .slider::-webkit-slider-thumb {
   border-color: var(--cream);
   box-shadow: 0 1px 6px rgba(225, 255, 38, 0.3);
