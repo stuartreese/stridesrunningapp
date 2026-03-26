@@ -749,104 +749,13 @@ const MoonIcon = () => (
   </svg>
 )
 const RunnerIcon = () => (
-  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <style>{`
-      .runner-leg-front {
-        animation: legFront 0.5s ease-in-out infinite alternate;
-        transform-origin: 48px 52px;
-      }
-      .runner-leg-back {
-        animation: legBack 0.5s ease-in-out infinite alternate;
-        transform-origin: 48px 52px;
-      }
-      .runner-arm-front {
-        animation: armFront 0.5s ease-in-out infinite alternate;
-        transform-origin: 48px 38px;
-      }
-      .runner-arm-back {
-        animation: armBack 0.5s ease-in-out infinite alternate;
-        transform-origin: 48px 38px;
-      }
-      .runner-body {
-        animation: bodyLean 0.5s ease-in-out infinite alternate;
-        transform-origin: 48px 45px;
-      }
-      .speed-line-1 {
-        animation: speedLine 0.5s ease-in-out infinite alternate;
-      }
-      .speed-line-2 {
-        animation: speedLine 0.5s ease-in-out infinite alternate 0.1s;
-      }
-      .speed-line-3 {
-        animation: speedLine 0.5s ease-in-out infinite alternate 0.2s;
-      }
-      @keyframes legFront {
-        0%   { transform: rotate(-30deg); }
-        100% { transform: rotate(25deg); }
-      }
-      @keyframes legBack {
-        0%   { transform: rotate(25deg); }
-        100% { transform: rotate(-30deg); }
-      }
-      @keyframes armFront {
-        0%   { transform: rotate(25deg); }
-        100% { transform: rotate(-20deg); }
-      }
-      @keyframes armBack {
-        0%   { transform: rotate(-20deg); }
-        100% { transform: rotate(25deg); }
-      }
-      @keyframes bodyLean {
-        0%   { transform: rotate(-4deg); }
-        100% { transform: rotate(-6deg); }
-      }
-      @keyframes speedLine {
-        0%   { opacity: 1; transform: translateX(0); }
-        100% { opacity: 0.4; transform: translateX(4px); }
-      }
-    `}</style>
-
-    {/* Head */}
-    <circle cx="44" cy="16" r="8" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-
-    {/* Body group — torso leaning forward */}
-    <g className="runner-body">
-      {/* Torso */}
-      <path d="M44 24 C42 32 40 38 42 50" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
-
-      {/* Arm front (left arm swinging forward) */}
-      <g className="runner-arm-front">
-        <path d="M43 33 C36 37 30 40 26 44" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
-      </g>
-
-      {/* Arm back (right arm swinging back) */}
-      <g className="runner-arm-back">
-        <path d="M43 33 C50 29 56 27 60 25" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
-      </g>
-
-      {/* Leg front (left leg forward) */}
-      <g className="runner-leg-front">
-        <path d="M42 50 C38 60 34 68 28 76" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </g>
-
-      {/* Leg back (right leg back/up) */}
-      <g className="runner-leg-back">
-        <path d="M42 50 C48 58 55 63 60 70" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </g>
-    </g>
-
-    {/* Speed lines — on the right side of figure */}
-    <g className="speed-line-1">
-      <line x1="68" y1="36" x2="82" y2="36" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-      <line x1="72" y1="36" x2="76" y2="36" stroke="currentColor" strokeWidth="3" strokeLinecap="round" opacity="0"/>
-    </g>
-    <g className="speed-line-2">
-      <line x1="65" y1="46" x2="82" y2="46" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-    </g>
-    <g className="speed-line-3">
-      <line x1="68" y1="56" x2="80" y2="56" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-    </g>
-  </svg>
+  <img
+    src="/runner.gif"
+    alt=""
+    width={90}
+    height={90}
+    style={{ display: 'block', opacity: 1, willChange: 'transform' }}
+  />
 )
 
 const EditIcon = () => (

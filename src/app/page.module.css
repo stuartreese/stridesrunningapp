@@ -46,22 +46,25 @@
 }
 
 .transitionOverlay {
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
   bottom: 0;
-  z-index: 100;
+  z-index: 9999;
   pointer-events: none;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .transitionRunner {
   position: absolute;
   top: 50%;
-  margin-top: -40px;
-  opacity: 1;
-  color: var(--primary);
+  margin-top: -45px;
+  opacity: 1 !important;
+  will-change: left;
   animation: runnerRun 1s linear forwards;
 }
 
