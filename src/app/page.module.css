@@ -19,31 +19,36 @@
 
 /* PAGE TRANSITION */
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(32px); }
+  from { opacity: 0; transform: translateX(40px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideOut {
   from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 0; transform: translateX(-40px); }
 }
 
-@keyframes runnerAppear {
-  0%   { opacity: 0; transform: translateX(-16px); }
-  30%  { opacity: 1; transform: translateX(0); }
-  70%  { opacity: 1; transform: translateX(8px); }
-  100% { opacity: 0; transform: translateX(32px); }
+@keyframes runnerRun {
+  0%   { opacity: 0; transform: translateX(120px); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-120px); }
+}
+
+@keyframes runnerBob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
 }
 
 .sliding {
-  animation: slideOut 0.18s ease forwards;
+  animation: slideOut 0.3s ease forwards;
 }
 
 .screen {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  animation: slideIn 0.22s ease forwards;
+  animation: slideIn 0.3s ease forwards;
 }
 
 .transitionOverlay {
@@ -55,7 +60,11 @@
   z-index: 100;
   pointer-events: none;
   color: var(--primary);
-  animation: runnerAppear 0.38s ease forwards;
+  animation: runnerRun 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.transitionOverlay svg {
+  animation: runnerBob 0.22s ease-in-out infinite;
 }
 
 .scrollable {

@@ -111,7 +111,7 @@ export default function StridesApp() {
       setScreen(s)
       setError('')
       setTransitioning(false)
-    }, 380)
+    }, 650)
   }
 
   const paceDisplay = (dist = distance, dur = duration) => {
@@ -747,7 +747,7 @@ const MoonIcon = () => (
   </svg>
 )
 const RunnerIcon = () => (
-  <svg width="72" height="72" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'scaleX(-1)' }}>
     <circle cx="62" cy="18" r="7" />
     <path d="M55 28 L44 48 L28 54" />
     <path d="M44 48 L50 68 L38 84" />
