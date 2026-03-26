@@ -29,26 +29,24 @@
 }
 
 @keyframes runnerRun {
-  0%   { opacity: 0; transform: translateX(120px); }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: translateX(-120px); }
+  0%   { transform: translateX(calc(50vw + 60px)); }
+  100% { transform: translateX(calc(-50vw - 60px)); }
 }
 
 @keyframes runnerBob {
   0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-4px); }
+  50%       { transform: translateY(-5px); }
 }
 
 .sliding {
-  animation: slideOut 0.6s ease forwards;
+  animation: slideOut 0.8s ease forwards;
 }
 
 .screen {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  animation: slideIn 0.6s ease forwards;
+  animation: slideIn 0.8s ease forwards;
 }
 
 .transitionOverlay {
@@ -60,11 +58,11 @@
   z-index: 100;
   pointer-events: none;
   color: var(--primary);
-  animation: runnerRun 1.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: runnerRun 1s linear forwards;
 }
 
 .transitionOverlay svg {
-  animation: runnerBob 0.44s ease-in-out infinite;
+  animation: runnerBob 0.8s ease-in-out infinite;
 }
 
 .scrollable {
