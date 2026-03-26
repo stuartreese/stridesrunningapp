@@ -70,7 +70,9 @@ const FEEL_LABELS = ['Brutal', 'Tough', 'Solid', 'Strong', 'Flying']
 
 export default function StridesApp() {
   const [screen, setScreen] = useState<Screen>('home')
-  const [transitioning, setTransitioning] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [showRunner, setShowRunner] = useState(false)
+  const [isEntering, setIsEntering] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [feeling, setFeeling] = useState('')
   const [runType, setRunType] = useState('')
@@ -106,13 +108,29 @@ export default function StridesApp() {
   }, [])
 
   const go = (s: Screen) => {
-    setTransitioning(true)
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setShowRunner(true)
+    setIsEntering(false)
+
     setTimeout(() => {
       setScreen(s)
       setError('')
-      setTransitioning(false)
-    }, 1000)
+      setIsEntering(true)
+    }, 200)
+
+    setTimeout(() => {
+      setShowRunner(false)
+      setIsTransitioning(false)
+    }, 700)
   }
+
+  // Clean up enter state after animation completes
+  useEffect(() => {
+    if (!isEntering) return
+    const timer = setTimeout(() => setIsEntering(false), 260)
+    return () => clearTimeout(timer)
+  }, [isEntering])
 
   const paceDisplay = (dist = distance, dur = duration) => {
     const raw = dur / dist
@@ -221,11 +239,12 @@ export default function StridesApp() {
 
   return (
     <div className={`${styles.shell} ${darkMode ? styles.dark : ''}`}>
-      <div className={`${styles.app} ${darkMode ? styles.dark : ''} ${transitioning ? styles.sliding : ''}`}>
+      <div className={`${styles.app} ${darkMode ? styles.dark : ''}`}>
+        <div className={`${styles.screen} ${isTransitioning && !isEntering ? styles.screenExit : ''} ${isEntering ? styles.screenEnter : ''}`}>
 
         {/* HOME */}
         {screen === 'home' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
               <DarkToggle />
@@ -278,12 +297,12 @@ export default function StridesApp() {
               )}
             </div>
             <NavBar active="home" />
-          </div>
+          </>
         )}
 
         {/* STEP 1 — FEELING */}
         {screen === 'step1' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <button className={styles.backBtn} onClick={() => go('home')}>← back</button>
               {stepDots(1)}
@@ -306,12 +325,12 @@ export default function StridesApp() {
                 ))}
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* STEP 2 — TYPE */}
         {screen === 'step2' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <button className={styles.backBtn} onClick={() => go('step1')}>← back</button>
               {stepDots(2)}
@@ -334,12 +353,12 @@ export default function StridesApp() {
                 ))}
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* STEP 3 — DISTANCE & DURATION */}
         {screen === 'step3' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <button className={styles.backBtn} onClick={() => go('step2')}>← back</button>
               {stepDots(3)}
@@ -371,12 +390,12 @@ export default function StridesApp() {
 
               <button className={styles.btnPrimary} onClick={() => go('step4')}>Continue →</button>
             </div>
-          </div>
+          </>
         )}
 
         {/* STEP 4 — NOTES */}
         {screen === 'step4' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <button className={styles.backBtn} onClick={() => go('step3')}>← back</button>
               {stepDots(4)}
@@ -406,12 +425,12 @@ export default function StridesApp() {
                 ✦ Generate My Workout
               </button>
             </div>
-          </div>
+          </>
         )}
 
         {/* LOADING */}
         {screen === 'loading' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.loadingScreen}>
               <div className={styles.pulseRing} />
               <div>
@@ -419,12 +438,12 @@ export default function StridesApp() {
                 <p className={styles.loadingText}>Personalizing based on how you feel today...</p>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* WORKOUT RESULT */}
         {screen === 'workout' && workout && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
               <DarkToggle />
@@ -491,12 +510,12 @@ export default function StridesApp() {
               </div>
             </div>
             <NavBar active="workout" />
-          </div>
+          </>
         )}
 
         {/* POST-RUN LOG */}
         {screen === 'post-run' && workout && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <button className={styles.backBtn} onClick={() => go('workout')}>← back</button>
               <span className={styles.logo}>Strides</span>
@@ -561,12 +580,12 @@ export default function StridesApp() {
                 </button>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* WEEK SETUP */}
         {screen === 'week-setup' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
               <DarkToggle />
@@ -625,12 +644,12 @@ export default function StridesApp() {
               </div>
             </div>
             <NavBar active="plan" />
-          </div>
+          </>
         )}
 
         {/* WEEK LOADING */}
         {screen === 'week-loading' && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.loadingScreen}>
               <div className={styles.pulseRing} />
               <div>
@@ -638,12 +657,12 @@ export default function StridesApp() {
                 <p className={styles.loadingText}>Structuring your training plan...</p>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* WEEKLY PLAN RESULT */}
         {screen === 'week' && weekPlan && (
-          <div className={styles.screen}>
+          <>
             <div className={styles.topBar}>
               <span className={styles.logo}>Strides</span>
               <DarkToggle />
@@ -699,19 +718,28 @@ export default function StridesApp() {
               </div>
             </div>
             <NavBar active="plan" />
-          </div>
+          </>
         )}
 
-        {/* TRANSITION OVERLAY */}
-        {transitioning && (
-          <div className={styles.transitionOverlay}>
-            <div className={styles.transitionRunner}>
-              <RunnerIcon />
-            </div>
-          </div>
-        )}
-
+        </div>
       </div>
+
+      {/* TRANSITION OVERLAY — sibling of .app, not inside it */}
+      {showRunner && (
+        <div className={styles.transitionOverlay} aria-hidden="true">
+          <div className={styles.transitionLane}>
+            <img
+              src="/runner.gif"
+              alt=""
+              className={styles.transitionRunner}
+              draggable={false}
+              width={90}
+              height={90}
+            />
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

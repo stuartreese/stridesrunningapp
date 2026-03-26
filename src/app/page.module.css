@@ -18,54 +18,78 @@
   overflow: hidden;
 }
 
-/* PAGE TRANSITION */
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(40px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* PAGE TRANSITIONS — native app smooth */
+@keyframes screenEnter {
+  from { transform: translate3d(18px, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 
-@keyframes slideOut {
-  from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(-40px); }
+@keyframes screenExit {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-18px, 0, 0); }
 }
 
 @keyframes runnerRun {
-  0%   { left: calc(100% + 10px); }
-  100% { left: -90px; }
-}
-
-.sliding {
-  animation: slideOut 0.8s ease forwards;
+  from { transform: translate3d(100vw, -50%, 0); }
+  to   { transform: translate3d(-140px, -50%, 0); }
 }
 
 .screen {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  animation: slideIn 0.8s ease forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
+.screenEnter {
+  animation: screenEnter 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.screenExit {
+  animation: screenExit 220ms cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* FULL-VIEWPORT OVERLAY — sibling of .app, not inside it */
 .transitionOverlay {
   position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  bottom: 0;
+  inset: 0;
   z-index: 9999;
   pointer-events: none;
   overflow: hidden;
-  isolation: isolate;
+}
+
+.transitionLane {
+  position: absolute;
+  inset: 0;
+}
+
+/* On desktop keep runner visually near the mobile column */
+@media (min-width: 700px) {
+  .transitionLane {
+    clip-path: inset(0 calc(50% - 280px) 0 calc(50% - 280px));
+  }
 }
 
 .transitionRunner {
   position: absolute;
   top: 50%;
-  margin-top: -45px;
-  opacity: 1 !important;
-  will-change: left;
-  animation: runnerRun 1s linear forwards;
+  left: 0;
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  opacity: 1;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(100vw, -50%, 0);
+  animation: runnerRun 700ms linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screenEnter, .screenExit, .transitionRunner {
+    animation: none !important;
+  }
 }
 
 .scrollable {
