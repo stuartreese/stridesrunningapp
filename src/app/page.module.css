@@ -34,11 +34,6 @@
   100% { left: -90px; }
 }
 
-@keyframes runnerBob {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-6px); }
-}
-
 .sliding {
   animation: slideOut 0.8s ease forwards;
 }
@@ -66,7 +61,8 @@
   top: 50%;
   margin-top: -40px;
   opacity: 1;
-  animation: runnerRun 1s linear forwards, runnerBob 0.8s ease-in-out infinite;
+  color: var(--primary);
+  animation: runnerRun 1s linear forwards;
 }
 
 .scrollable {
