@@ -31,7 +31,7 @@
 
 @keyframes runnerRun {
   0%   { left: calc(100% + 10px); }
-  100% { left: -74px; }
+  100% { left: -90px; }
 }
 
 @keyframes runnerBob {
@@ -64,8 +64,8 @@
 .transitionRunner {
   position: absolute;
   top: 50%;
-  margin-top: -32px;
-  color: var(--primary);
+  margin-top: -40px;
+  opacity: 1;
   animation: runnerRun 1s linear forwards, runnerBob 0.8s ease-in-out infinite;
 }
 
