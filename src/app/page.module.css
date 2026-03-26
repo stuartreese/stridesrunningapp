@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column;
   transition: background 0.25s;
+  overflow: hidden;
 }
 
 /* PAGE TRANSITION */
@@ -29,13 +30,13 @@
 }
 
 @keyframes runnerRun {
-  0%   { transform: translateX(calc(50vw + 60px)); }
-  100% { transform: translateX(calc(-50vw - 60px)); }
+  0%   { left: calc(100% + 10px); }
+  100% { left: -74px; }
 }
 
 @keyframes runnerBob {
   0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-5px); }
+  50%       { transform: translateY(-6px); }
 }
 
 .sliding {
@@ -51,18 +52,21 @@
 
 .transitionOverlay {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 100;
   pointer-events: none;
-  color: var(--primary);
-  animation: runnerRun 1s linear forwards;
+  overflow: hidden;
 }
 
-.transitionOverlay svg {
-  animation: runnerBob 0.8s ease-in-out infinite;
+.transitionRunner {
+  position: absolute;
+  top: 50%;
+  margin-top: -32px;
+  color: var(--primary);
+  animation: runnerRun 1s linear forwards, runnerBob 0.8s ease-in-out infinite;
 }
 
 .scrollable {

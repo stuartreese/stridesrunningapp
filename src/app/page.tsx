@@ -705,7 +705,9 @@ export default function StridesApp() {
         {/* TRANSITION OVERLAY */}
         {transitioning && (
           <div className={styles.transitionOverlay}>
-            <RunnerIcon />
+            <div className={styles.transitionRunner}>
+              <RunnerIcon />
+            </div>
           </div>
         )}
 
@@ -747,15 +749,23 @@ const MoonIcon = () => (
   </svg>
 )
 const RunnerIcon = () => (
-  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="62" cy="18" r="7" />
-    <path d="M55 28 L44 48 L28 54" />
-    <path d="M44 48 L50 68 L38 84" />
-    <path d="M44 48 L62 56 L72 72" />
-    <path d="M55 28 L66 36 L78 30" />
-    <line x1="18" y1="50" x2="30" y2="50" />
-    <line x1="14" y1="58" x2="28" y2="58" />
-    <line x1="20" y1="66" x2="30" y2="62" />
+  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    {/* Head */}
+    <circle cx="42" cy="10" r="5" />
+    {/* Body */}
+    <line x1="42" y1="15" x2="38" y2="30" />
+    {/* Left arm forward */}
+    <path d="M40 20 L30 26" />
+    {/* Right arm back */}
+    <path d="M40 20 L50 17" />
+    {/* Left leg back */}
+    <path d="M38 30 L44 44 L50 54" />
+    {/* Right leg forward */}
+    <path d="M38 30 L30 42 L22 50" />
+    {/* Speed lines */}
+    <line x1="8" y1="28" x2="22" y2="28" />
+    <line x1="4" y1="35" x2="20" y2="35" />
+    <line x1="10" y1="42" x2="22" y2="42" />
   </svg>
 )
 
